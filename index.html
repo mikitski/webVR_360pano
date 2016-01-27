@@ -21,7 +21,7 @@ body {
 
 <body>
 <h1> This is the page of the page</h1>
-<div style="position:absolute; height: 300; width:600; background_color:green;" id="container"></div>
+<div style="display:block; position:absolute; height: 300px; width:600px;" id="container"></div>
 <h1> something else </h1>
 </body>
 
@@ -59,6 +59,9 @@ var panoramaNumber = Math.floor(Math.random()*panoramasArray.length);
 
 var container = document.getElementById('container');
 
+var w = container.offsetWidth || window.innerWidth;
+var h = container.offsetHeight || window.innerHeight;
+
 //Setup three.js WebGL renderer
 var renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -71,14 +74,14 @@ container.appendChild(renderer.domElement);
 var scene = new THREE.Scene();
 
 // Create a three.js camera.
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.3, 10000);
+var camera = new THREE.PerspectiveCamera(75, w / h, 0.3, 10000);
 
 // Apply VR headset positional data to camera.
 var controls = new THREE.VRControls(camera);
 
 // Apply VR stereo rendering to renderer.
 var effect = new THREE.VREffect(renderer);
-effect.setSize(window.innerWidth, window.innerHeight);
+effect.setSize(w, h);
 
 // Create a VR manager helper to enter and exit VR mode.
 var manager = new WebVRManager(renderer, effect);
@@ -153,10 +156,10 @@ window.addEventListener('keydown', onKey, true);
 
 // Handle window resizes
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
 
-  effect.setSize( window.innerWidth, window.innerHeight );
+  effect.setSize( w, h );
 }
 
 window.addEventListener('resize', onWindowResize, false);
