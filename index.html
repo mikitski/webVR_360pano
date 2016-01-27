@@ -20,7 +20,9 @@ body {
 </head>
 
 <body>
-
+<h1> This is the page of the page</h1>
+<div style="position:absolute; height: 300; width:600; background_color:green;" id="container"></div>
+<h1> something else </h1>
 </body>
 
 <!--
@@ -55,12 +57,15 @@ body {
 var panoramasArray = ["car1.jpg","car2.jpg","car3.jpg"];
 var panoramaNumber = Math.floor(Math.random()*panoramasArray.length);
 
+var container = document.getElementById('container');
+
 //Setup three.js WebGL renderer
 var renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 
 // Append the canvas element created by the renderer to document body element.
-document.body.appendChild(renderer.domElement);
+//document.body.appendChild(renderer.domElement);
+container.appendChild(renderer.domElement);
 
 // Create a three.js scene.
 var scene = new THREE.Scene();
