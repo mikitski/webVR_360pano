@@ -135,12 +135,16 @@ cube.position.z = -5;
 cube.position.x = 5;
 scene.add(cube);
 
+cube.gazing_duration = function(){
+  reticle.set_text("this is cube");
+}
+
 cube.ongazeover = function(){
-  this.material = reticle.get_random_hex_material();
+  //this.material = reticle.get_random_hex_material();
 }
 
 cube.ongazeout = function(){
-  this.material = cubeMaterial;
+  //this.material = cubeMaterial;
 }
 
 reticle.add_collider(cube);
@@ -162,7 +166,10 @@ reticle.add_collider(cube);
 */
 
 //create mirror v2
-verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.01, textureWidth: w, textureHeight: h, color:0x999999, debugMode:true} );
+var verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.01, textureWidth: w, textureHeight: h, color:0x999999, debugMode:true} );
+//verticalMirror.material.alphaMap = THREE.ImageUtils.loadTexture("texture.jpg")
+
+var mirrorSphere = new THREE.SphereGeometry(100, 100, 40, 1.5);
 
 var verticalMirrorMesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 35, 7 ), verticalMirror.material );
 verticalMirrorMesh.add( verticalMirror );
