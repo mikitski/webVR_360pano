@@ -143,11 +143,11 @@ cube.gazing_duration = function(){
 }
 
 cube.ongazeover = function(){
-  //this.material = reticle.get_random_hex_material();
+  this.material = reticle.get_random_hex_material();
 }
 
 cube.ongazeout = function(){
-  //this.material = cubeMaterial;
+  this.material = cubeMaterial;
 }
 
 reticle.add_collider(cube);
