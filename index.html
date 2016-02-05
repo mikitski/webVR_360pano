@@ -48,6 +48,9 @@ body {
   Helps enter and exit VR mode, provides best practices while in VR.
   -->
 <script src="js/webvr-manager.js"></script>
+
+<script src="js/vreticle.js"></script>
+
 <script src="js/texture_animator.js"></script>
 <script src="js/mirror.js"></script>
 
@@ -89,6 +92,10 @@ effect.setSize(w, h);
 // Create a VR manager helper to enter and exit VR mode.
 var manager = new WebVRManager(renderer, effect);
 
+//create gaze interaction manager
+var reticle = vreticle.Reticle(camera);
+scene.add(camera);
+
 var clock = new THREE.Clock();
 
 
@@ -121,10 +128,22 @@ var materials = [
 
 ];
 
-var cube = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), new THREE.MeshFaceMaterial( materials ) );
+var cubeMaterial = new THREE.MeshFaceMaterial( materials );
+
+var cube = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), cubeMaterial);
 cube.position.z = -5;
 cube.position.x = 5;
 scene.add(cube);
+
+cube.ongazeover = function(){
+  this.material = reticle.get_random_hex_material();
+}
+
+cube.ongazeout = function(){
+  this.material = cubeMaterial;
+}
+
+reticle.add_collider(cube);
 
 
 
@@ -186,6 +205,8 @@ function animate() {
   manager.render(scene, camera);
 
   //renderer.render();
+
+  reticle.reticle_loop();
 
 
   // Render the scene through the VREffect.
