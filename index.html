@@ -106,7 +106,10 @@ sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 // creation of the sphere material
 var sphereMaterial = new THREE.MeshBasicMaterial();
 sphereMaterial.map = THREE.ImageUtils.loadTexture(panoramasArray[panoramaNumber])
- 
+sphereMaterial.alphaMap = (new THREE.TextureLoader()).load("car1_interior_mirror_mask.png");
+sphereMaterial.alphaTest = 0.5; 
+
+
 // geometry + material = mesh (actual object)
 var sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
 scene.add(sphereMesh);
@@ -152,31 +155,50 @@ reticle.add_collider(cube);
 
 
 // create mirror v1
-/*
-  var mirrorBox = new THREE.BoxGeometry(2.5, 0.5, 0.1);
-  mirrorCubeCamera = new THREE.CubeCamera( 1, 5000, 512 );
+
+  
+  mirrorCubeCamera = new THREE.CubeCamera( 1, 1000, 512 );
+  //mirrorCubeCamera = new THREE.PerspectiveCamera(90, 0.1, 10000, 512 );
   mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
   scene.add( mirrorCubeCamera );
-
+  
+  
   var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+
+  var mirrorBox = new THREE.BoxGeometry(130, 100, 0.1);
   mirrorCube = new THREE.Mesh( mirrorBox, mirrorCubeMaterial );
-  mirrorCube.position.set(3,2,-5);
-  mirrorCubeCamera.position = mirrorCube.position;
+  mirrorCube.position.set(150,45,-200);
   scene.add(mirrorCube);  
+  
+  mirrorCubeCamera.position = mirrorCube.position;
+  mirrorCubeCamera.position.z = mirrorCubeCamera.position.z - 50;
+
+  /*
+  mirrorSphereGeo = new THREE.SphereGeometry(100.01, 100, 40, 1.5);
+  mirrorSphereGeo.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
+  mirrorSphere = new THREE.Mesh(mirrorSphereGeo, mirrorCubeCamera);
+  mirrorSphere.position.set(0,0,0);
+  scene.add(mirrorSphere);
 */
 
 //create mirror v2
-var verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.01, textureWidth: w, textureHeight: h, color:0x999999, debugMode:true} );
-//verticalMirror.material.alphaMap = THREE.ImageUtils.loadTexture("texture.jpg")
+/*var verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.03, textureWidth: w, textureHeight: h, color:0x999999, debugMode:true} );
+verticalMirror.material.alphaMap = (new THREE.TextureLoader()).load("car1_interior_mirror_mask_inv.png");
+verticalMirror.material.alphaTest = 0.5; 
+verticalMirror.transparent = true;
 
-var mirrorSphere = new THREE.SphereGeometry(100, 100, 40, 1.5);
+var mirrorSphere = new THREE.SphereGeometry(100.01, 100, 40, 1.5);
+mirrorSphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
-var verticalMirrorMesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 35, 7 ), verticalMirror.material );
+var mirrorDefault = new THREE.PlaneBufferGeometry( 1000, 1000 );
+
+var verticalMirrorMesh = new THREE.Mesh( mirrorSphere, verticalMirror.material );
 verticalMirrorMesh.add( verticalMirror );
-verticalMirrorMesh.position.x = 50;
-verticalMirrorMesh.position.y = 27;
-verticalMirrorMesh.position.z = -65;
+//verticalMirrorMesh.position.x = 75;
+//verticalMirrorMesh.position.y = 40;
+//verticalMirrorMesh.position.z = -99;
 scene.add( verticalMirrorMesh );
+*/
 
 // Request animation frame loop function
 function animate() {
@@ -185,27 +207,35 @@ function animate() {
   cube.rotation.x += 0.01;
   annie.update(750 * delta);
 
-/*  var currRenderFunc = renderer.render
-  renderer.render = origRenrerFunc;
-  mirrorCube.visible = false;
-  mirrorCubeCamera.updateCubeMap( renderer, scene );
-  mirrorCube.visible = true;
-  renderer.render = currRenderFunc;
-*/
 
 
 
   // Update VR headset position and apply to camera.
   controls.update();
 
-  verticalMirror.rotation.x = camera.rotation.x + 0.2;
-  verticalMirror.rotation.y = camera.rotation.y - 0.3;
-  verticalMirror.rotation.z = camera.rotation.z;
+  mirrorCubeCamera.rotation.x = -camera.rotation.x + 0.2;
+  mirrorCubeCamera.rotation.y = camera.rotation.y - 0.3;
+  mirrorCubeCamera.rotation.z = camera.rotation.z;
 
   var currRenderFunc = renderer.render
   renderer.render = origRenderFunc;
-  verticalMirror.render();
+  mirrorCube.visible = false;
+  mirrorCubeCamera.updateCubeMap( renderer, scene );
+  //mirrorCubeCamera.updateProjectionMatrix();
+  mirrorCube.visible = true;
   renderer.render = currRenderFunc;
+
+
+  //verticalMirror.rotation.x = camera.rotation.x + 0.2;
+  //verticalMirror.rotation.y = camera.rotation.y - 0.3;
+  //verticalMirror.rotation.x = -camera.rotation.x;
+  //verticalMirror.rotation.y = -camera.rotation.y;
+  //verticalMirror.rotation.z = camera.rotation.z;
+
+//  var currRenderFunc = renderer.render
+//  renderer.render = origRenderFunc;
+//  verticalMirror.render();
+//  renderer.render = currRenderFunc;
 
 
   // Render the scene through the manager.
