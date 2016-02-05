@@ -162,13 +162,13 @@ reticle.add_collider(cube);
 */
 
 //create mirror v2
-verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.01, textureWidth: w, textureHeight: h, color:0x999999, debugMode:false} );
+verticalMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.01, textureWidth: w, textureHeight: h, color:0x999999, debugMode:true} );
 
-var verticalMirrorMesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2.5, 0.5 ), verticalMirror.material );
+var verticalMirrorMesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 35, 7 ), verticalMirror.material );
 verticalMirrorMesh.add( verticalMirror );
-verticalMirrorMesh.position.x = 3;
-verticalMirrorMesh.position.y = 2;
-verticalMirrorMesh.position.z = -5;
+verticalMirrorMesh.position.x = 50;
+verticalMirrorMesh.position.y = 27;
+verticalMirrorMesh.position.z = -65;
 scene.add( verticalMirrorMesh );
 
 // Request animation frame loop function
@@ -191,8 +191,8 @@ function animate() {
   // Update VR headset position and apply to camera.
   controls.update();
 
-  verticalMirror.rotation.x = camera.rotation.x + 0.1;
-  verticalMirror.rotation.y = camera.rotation.y - 0.05;
+  verticalMirror.rotation.x = camera.rotation.x + 0.2;
+  verticalMirror.rotation.y = camera.rotation.y - 0.3;
   verticalMirror.rotation.z = camera.rotation.z;
 
   var currRenderFunc = renderer.render
