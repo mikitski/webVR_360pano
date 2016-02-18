@@ -106,7 +106,7 @@ sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 // creation of the sphere material
 var sphereMaterial = new THREE.MeshBasicMaterial();
 sphereMaterial.map = THREE.ImageUtils.loadTexture(panoramasArray[panoramaNumber])
-sphereMaterial.alphaMap = (new THREE.TextureLoader()).load("car1_interior_mirror_mask.png");
+//MY: sphereMaterial.alphaMap = (new THREE.TextureLoader()).load("car1_interior_mirror_mask.png");
 sphereMaterial.alphaTest = 0.5; 
 
 
